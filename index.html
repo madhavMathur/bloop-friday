@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Best places to eat</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"    crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Shade" rel="stylesheet">
+
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        width: 70%;
+        height: 100%;
+        float: left;
+        border: 2px solid black;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #option-panel {
+        height: 100%;
+        width: 30%;
+        float: right;
+        text-align: center;
+        border-spacing: 5em;
+        background-color: #6ab1d4;
+      }
+
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+  </head>
+  <body style="font-family: 'Slabo 27px', serif;"">
+    <div id="floating-panel">
+      <input id="address" type="textbox" placeholder="Enter city name">
+      <input id="submit" type="button" value="Go to city">
+    </div>
+
+    <div id="map" style="z-index: -1;"></div>
+
+    <div id="option-panel">
+      <div id="option-header" style="background-color: #dddddd; margin-top: ">
+        <h1 style="font-size: 40pt; font-family: 'Bungee Shade', cursive;"> BestFind </h1>
+        <h4 style="font-weight: 400;"> Never miss the best spots again! </h4>
+        <hr>
+      </div>
+      
+      <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default" style="float: left;"><i class="material-icons">local_pizza</i><style="font-weight: 400;">$</style></button>
+        <button type="button" class="btn btn-default" style="margin-right: 40px; float: left;">
+        <i class="material-icons">restaurant</i><style="font-weight: 400;">$$</style></button>
+        <button type="button" class="btn btn-default"><i class="material-icons">local_drink</i><style="font-weight: 400;">$</style></button>
+        <button type="button" class="btn btn-default"><i class="material-icons">local_bar</i><style="font-weight: 400;">$$</style></button>
+      </div>
+
+      <hr>
+      <label style="font-size: 14pt; float: left; margin-left: 10px; font-weight: 300">Recommendation:</label>
+      <table class="table table-striped" style="font-size: 14pt; ">
+       <tr class=""><td>Goody's</td></tr>
+       <tr class=""><td>OVT</td></tr>
+       <tr class=""><td>Pines</td></tr>
+       <tr class=""><td>Goody's</td></tr>
+       <tr class=""><td>OVT</td></tr>
+       <tr class=""><td>Pines</td></tr>
+       <tr class=""><td>Goody's</td></tr>
+       <tr class=""><td>OVT</td></tr>
+       <tr class=""><td>Pines</td></tr>
+     </table>
+     <footer style="margin-top: 0px;">
+       &#x24B8; Copyright 2017 Ashvin Lakhwani and Leo Leo
+     </footer>
+    </div>
+    <script>
+      function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 2,
+          center: {lat: 20, lng: 0}
+        });
+        var geocoder = new google.maps.Geocoder();
+
+        //var input = document.getElementById('address');
+        //var autocomplete = new google.maps.places.Autocomplete(input);
+        //google.maps.event.addDomListener(window, 'load', init);
+
+        document.getElementById('submit').addEventListener('click', function() {
+          geocodeAddress(geocoder, map);
+        });
+      }
+
+      function geocodeAddress(geocoder, resultsMap) {
+        var address = document.getElementById('address').value;
+        geocoder.geocode({'address': address}, function(results, status) {
+          if (status === 'OK') {
+            resultsMap.setCenter(results[0].geometry.location);
+            resultsMap.setZoom(12);
+            var marker = new google.maps.Marker({
+              map: resultsMap,
+              position: results[0].geometry.location
+            });
+          } else {
+            alert('City was not found for the following reason: ' + status);
+          }
+        });
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-1fF5ZPhj9Otf1e2bTXK05sDy18JeAMc&callback=initMap">
+    </script>
+  </body>
+</html>
